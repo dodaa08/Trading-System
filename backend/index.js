@@ -1,24 +1,17 @@
 import express from 'express';
+import cors from 'cors';
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors(
+    {
+        origin: '*',
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['Content-Type'],
+    }
+));
 
-
-const Balance = {
-   "key" : Number
-};
-
-const User = {
-    "userId" : String,
-    "balance" : Balance
-};
-
-const Order = {
-    "userId" : String,
-    "quantity" : Number,
-    "price" : Number,
-}
 
 const Tiker = "BTCUSDT"; // Tiker name
 
@@ -56,6 +49,9 @@ const flipBalance = (userId1, userId2, quantity, price )=>{
 
 const fillOrders = (side, price, quantity, userId)=>{
     let remainingQTY = quantity;
+    if (remainingQTY === 0) {
+        return res.status(200).send(`Order Filled: ${quantity}`);
+    }
     if(side == "bid"){
         for(let i = asks.length-1 ; i>=0; i++){
             if(asks[i].price>price){
@@ -91,6 +87,8 @@ const fillOrders = (side, price, quantity, userId)=>{
         }
     }
 }
+
+return remainingQTY;
 }
 const orders = (req, res) => {
     const { quantity, price, side, userId } = req.body;
@@ -121,7 +119,7 @@ const findDepth =(req, res)=>{
         depth[bid.price] += bid.quantity;
     }
 
-    const asks = {};
+    const asks = [];
     for(let i =0; i<asks.length; i++){
         const ask = asks[i];
         if(!asks[ask.price]){
@@ -135,27 +133,43 @@ const findDepth =(req, res)=>{
 }
 
 
-const getBalance = (req, res)=>{
-    const {userId} = req.params.userId;
+
+const getBalance = (req, res) => {
+    const { userId } = req.params;  // Correctly capture userId from the URL parameter
     const user = users.find(user => user.id == userId);
-    if(!user){
+    
+    if (!user) {
         return res.status(404).send("User not found");
     }
+
     res.status(200).send(user.balance);
-}
+};
 
 
 
 const getQuote = (req, res)=>{
+    const {quantity, side} = req.body;
+    if (side === "bid") {
+        const Ask = asks[0];
+        if (!Ask) {
+            return res.json({ Message: "Ask not found" });
+        }
+        res.json({ Ask: Ask.price, total: Ask.price * quantity });  // Corrected to use total
+    } else {
+        const bestBid = bids[0];
+        if (!bestBid) {
+            return res.json({ Message: "Bid not found" });
+        }
+        res.json({ Bestbid: bestBid.price, total: bestBid.price * quantity });  // Corrected to use total
+    }
     
-
 }
 
 
 // Place a Limit order -
 app.post("/orders", orders);
 app.get("/depth", findDepth);
-app.get("/balance", getBalance);
+app.get("/balance/:userId", getBalance);
 app.get("/quote", getQuote);
 
 
