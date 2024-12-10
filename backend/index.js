@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import db from './db.js'; // Ensure db.js is correctly set up with models
+import db from './db.js'; 
 const { OrderBook, User} = db;
 
 dotenv.config();
@@ -170,9 +170,7 @@ const placeOrder = async (req, res) => {
         if (!user) return res.status(404).send("User not found");
 
         // Check if the user has enough BTC for the order (if it's an ask)
-        if (side === "ask" && user.BTC < quantity) {
-            return res.status(400).send("Insufficient BTC balance to place ask order");
-        }
+        
 
         const remainingQTY = await fillOrders(side, price, quantity, userId);
 
@@ -200,17 +198,35 @@ const placeOrder = async (req, res) => {
     }
 };
 
-const getOrderBook = async (req, res) => {
-    try {
-        const orderBook = await OrderBook.findOne();
-        if (!orderBook) return res.status(404).send("Order book not found");
+const getDepth = async (req, res) => {
+    const depth = {};
 
-        res.status(200).send(orderBook);
+    const orderBook = await OrderBook.findOne();
+const { bids, asks } = orderBook; // Ensure OrderBook has bids/asks structure
+    console.log("Bids:", bids);
+    console.log("Asks:", asks);
+
+    try {
+        // Accumulate bids
+        for (let i = 0; i < bids.length; i++) {
+            console.log("Processing bid:", bids[i]);
+            depth[bids[i].price] = (depth[bids[i].price] || 0) + bids[i].quantity;
+        }
+        // Accumulate asks
+        for (let i = 0; i < asks.length; i++) {
+            console.log("Processing ask:", asks[i]);
+            depth[asks[i].price] = (depth[asks[i].price] || 0) + asks[i].quantity;
+        }
+
+        console.log("Depth:", depth);
+        res.status(200).json({ depth });
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Failed to fetch order book");
+        console.error("Error processing depth:", error);
+        res.status(500).send("Failed to fetch depth");
     }
 };
+
+
 
 const getQuote = async (req, res) => {
     const { side, price } = req.body;
@@ -232,14 +248,41 @@ const getQuote = async (req, res) => {
     }
 };
 
+const getBids = async (req, res) => {
+    try {
+        // Query the OrderBook collection and project only the bids field
+        const orderBook = await OrderBook.findOne({}, { bids: 1 });
+        console.log(orderBook.bids);
+        res.status(200).json({ bids: orderBook.bids });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+const getAsks = async (req, res) => {   
+    try{
+        const orderBook = await OrderBook.findOne({}, {asks: 1});
+        console.log(orderBook.asks);
+        res.status(200).json({asks: orderBook.asks});
+    }
+    catch(error){
+        console.error(error);
+        res.status(500).send("Internal Server Error");  
+    }
+}
+
+
 // Route Endpoints
 app.get('/balance', getBalance);
 app.post('/order', placeOrder);
-app.get('/depth', getOrderBook);
-app.get('/quote', getQuote);
+app.get('/depth', getDepth);
+app.post('/quote', getQuote);
 app.post('/createUser', createUser);
+app.get("/bids", getBids);
+app.get("/asks", getAsks);
 
-// Database Connection
+
 const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URL);
@@ -250,7 +293,7 @@ const connect = async () => {
 };
 connect();
 
-// Start Server
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
