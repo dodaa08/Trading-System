@@ -3,7 +3,7 @@ import axios from 'axios';
 import HeaderC from '../components/HeaderC';
 import OrderBookN from '../components/OrderBookN';
 import OrderDepth from '../components/OrderDepth';
-import Quote from '../components/Quote';
+
 
 function Landing() {
     const [Bids, setBids] = useState([]);
@@ -29,7 +29,7 @@ function Landing() {
     const data = { bids: Bids, asks: Asks };
 
     return (
-        <div className="bg-black h-full w-full text-white">
+        <div className="bg-black h-screen    w-full text-white">
             <HeaderC />
             <div className="flex flex-wrap justify-evenly ">
                 {error ? (

@@ -155,7 +155,6 @@ const getBalance = async (req, res) => {
 };
 
 
-
 const placeOrder = async (req, res) => {
     const { userId, side, price, quantity } = req.body;
 
@@ -297,8 +296,8 @@ const getVolume = async (req, res) => {
         const { bids, asks } = orderBook;
 
         // Calculate total volume (sum of quantities)
-        const bidVolume = bids.reduce((acc, bid) => acc + bid.quantity, 0);
-        const askVolume = asks.reduce((acc, ask) => acc + ask.quantity, 0);
+        const bidVolume = bids.reduce((acc, bid) => acc + bid.price *bid.quantity , 0);
+        const askVolume = asks.reduce((acc, ask) => acc + ask.price * ask.quantity, 0);
 
         const totalVolume = bidVolume + askVolume;
 
@@ -308,9 +307,6 @@ const getVolume = async (req, res) => {
         res.status(500).send("Failed to fetch volume");
     }
 };
-
-
-
 
 
 // Route Endpoints

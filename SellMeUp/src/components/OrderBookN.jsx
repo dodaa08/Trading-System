@@ -56,7 +56,7 @@ function OrderBookN() {
     return (
         <>
         
-        <div className='border-2 border-gray-600 rounded-xl p-4 text-white w-96 bg-gray-900 '>
+        <div className='border-2 border-gray-700 rounded-xl p-4 text-white w-96 bg-black/125 '>
             
             <div className='mb-4'>
                 <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Bids</h1>
