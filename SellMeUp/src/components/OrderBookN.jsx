@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import OrderDepth from './OrderDepth';
+import {Link} from 'react-router-dom';
 
 function OrderBookN() {
     const [bid, setBid] = useState([]);
@@ -53,9 +54,11 @@ function OrderBookN() {
     }
 
     return (
+        <>
+        
         <div className='border-2 border-gray-600 rounded-xl p-4 text-white w-96 bg-gray-900 '>
             
-            <div className='mb-6'>
+            <div className='mb-4'>
                 <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Bids</h1>
                 <div className='flex justify-between gap-10 mt-4'>
                     <h1 className='font-mono text-xl'>Quantity</h1>
@@ -88,8 +91,18 @@ function OrderBookN() {
                         </div>
                     ))}
                 </div>
+
+                
             </div>
+            <div className='flex justify-center w-full py-5 '>
+                    <Link to="/create">
+                     <button className='border-2 border-gray-600 py-2 px-5 rounded-xl font-mono hover:border-b transition duration-200'>Create Bids/Asks</button>
+                    </Link>
+                
+                </div>
         </div>
+       
+                    </>
     );
 }
 

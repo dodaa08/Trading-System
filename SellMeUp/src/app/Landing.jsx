@@ -31,7 +31,7 @@ function Landing() {
     return (
         <div className="bg-black h-full w-full text-white">
             <HeaderC />
-            <div className="flex flex-wrap justify-evenly py-10">
+            <div className="flex flex-wrap justify-evenly ">
                 {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (
@@ -39,7 +39,7 @@ function Landing() {
                         <div className="py-10">
                             <OrderBookN />
                         </div>
-                        <div className="py-10">
+                        <div className="py-20">
                             <OrderDepth data={data} />
                         </div>
                        
@@ -48,9 +48,6 @@ function Landing() {
                 )}
                 
             </div>
-            <div className="py-10">
-                            <Quote />
-                        </div>
         </div>
     );
 }

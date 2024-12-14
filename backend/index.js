@@ -160,41 +160,58 @@ const placeOrder = async (req, res) => {
     const { userId, side, price, quantity } = req.body;
 
     try {
+        // 1️⃣ Validate Input
+        if (!userId) return res.status(400).json({ message: "User ID is required" });
+        if (!quantity || quantity <= 0 || isNaN(quantity)) return res.status(400).json({ message: "Invalid quantity. It must be a positive number." });
+        if (!price || price <= 0 || isNaN(price)) return res.status(400).json({ message: "Invalid price. It must be a positive number." });
+        if (!["bid", "ask"].includes(side)) return res.status(400).json({ message: "Invalid side. Must be 'bid' or 'ask'." });
+
+        // 2️⃣ Check if OrderBook exists
         let orderBook = await OrderBook.findOne();
         if (!orderBook) {
             orderBook = new OrderBook({ bids: [], asks: [] });
             await orderBook.save();
         }
 
+        // 3️⃣ Check if user exists
         const user = await User.findOne({ userId });
-        if (!user) return res.status(404).send("User not found");
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-        // Check if the user has enough BTC for the order (if it's an ask)
-        
+        // 4️⃣ Check if user has enough balance for an ask (sell) order
+        if (side === 'ask' && user.balance < quantity) {
+            return res.status(400).json({ message: "Insufficient BTC balance to place an ask order" });
+        }
 
-        const remainingQTY = await fillOrders(side, price, quantity, userId);
+        // 5️⃣ Attempt to fill existing orders
+        let remainingQTY;
+        try {
+            remainingQTY = await fillOrders(side, price, quantity, userId);
+        } catch (error) {
+            console.error("Error filling order:", error.message);
+            return res.status(500).json({ message: "Failed to fill the order", error: error.message });
+        }
 
+        // 6️⃣ If fully filled, respond successfully
         if (remainingQTY === 0) {
-            return res.status(200).send(`Order Filled: ${quantity}`);
+            return res.status(200).json({ message: `Order fully filled`, quantity });
         }
 
-        // If there is remaining quantity, add the order to the book
+        // 7️⃣ If remaining quantity, add to OrderBook
         if (side === "bid") {
-            orderBook.bids.push({ price, quantity, userId });
+            await OrderBook.findOneAndUpdate({}, { $push: { bids: { price, quantity: remainingQTY, userId } } });
+            user.fiatBalance -= price * quantity;
         } else if (side === "ask") {
-            orderBook.asks.push({ price, quantity, userId });
+            await OrderBook.findOneAndUpdate({}, { $push: { asks: { price, quantity: remainingQTY, userId } } });
+            user.balance -= quantity;
         }
 
-        // Save the updated order book
-        await orderBook.save();
-
-        // Save the updated user balance
+        // 8️⃣ Save User Balance
         await user.save();
 
-        res.status(200).send("Order placed successfully");
+        res.status(200).json({ message: "Order placed successfully", order: { side, price, quantity: remainingQTY } });
     } catch (error) {
         console.error("Error placing order:", error.message);
-        res.status(500).send("Failed to place order");
+        res.status(500).json({ message: "Error placing order", error: error.message });
     }
 };
 
@@ -272,6 +289,29 @@ const getAsks = async (req, res) => {
     }
 }
 
+const getVolume = async (req, res) => {
+    try {
+        const orderBook = await OrderBook.findOne();
+        if (!orderBook) return res.status(404).send("Order book not found");
+
+        const { bids, asks } = orderBook;
+
+        // Calculate total volume (sum of quantities)
+        const bidVolume = bids.reduce((acc, bid) => acc + bid.quantity, 0);
+        const askVolume = asks.reduce((acc, ask) => acc + ask.quantity, 0);
+
+        const totalVolume = bidVolume + askVolume;
+
+        res.status(200).json({ totalVolume});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Failed to fetch volume");
+    }
+};
+
+
+
+
 
 // Route Endpoints
 app.get('/balance', getBalance);
@@ -281,6 +321,7 @@ app.post('/quote', getQuote);
 app.post('/createUser', createUser);
 app.get("/bids", getBids);
 app.get("/asks", getAsks);
+app.get("/volume", getVolume);
 
 
 const connect = async () => {

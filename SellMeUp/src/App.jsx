@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import Landing from './app/Landing'
-import HeaderC from './components/HeaderC'
+import CreateBA from './app/CreateBA'
 function App() {
   return(
     <>
@@ -8,6 +8,7 @@ function App() {
     <Router>
       <Routes >
         <Route path='/' element={<Landing />}/> 
+        <Route path='/create' element={<CreateBA />}/>
       </Routes>
     </Router>
     </div>
