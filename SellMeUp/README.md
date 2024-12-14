@@ -19,9 +19,8 @@ This is a simple trading system web application built with React and Axios. It a
 - **Styling**: Tailwind CSS (dark mode included)
 - **HTTP Client**: Axios
 
----
 
-## Installation
+
 
 ### Prerequisites
 
