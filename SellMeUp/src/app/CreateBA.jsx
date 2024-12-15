@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import HeadersC from '../components/HeaderC';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 function CreateBA() {
 
     // 🟢 State Variables
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
-    const [userId, setUserId] = useState('');
+    
     const [side, setSide] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false); // Add loading state
-
+    const navigate = useNavigate();
     // 🟢 Create Order (Fixed)
     const createRecords = async () => {
         // 1️⃣ Form Validation 
-        if (!userId || !price || !quantity || !side) {
+        if ( !price || !quantity || !side) {
             setError('Please fill in all fields');
             return;
         }
@@ -25,7 +25,7 @@ function CreateBA() {
             setError(null); // Clear previous errors
 
             const response = await axios.post("http://10.12.80.135:3000/order", {
-                userId: userId,
+                userId: localStorage.getItem('userId'),
                 side: side,
                 price: Number(price),
                 quantity: Number(quantity)
@@ -33,11 +33,10 @@ function CreateBA() {
 
             console.log(response.data);
             alert(response.data.message);
-            
+            navigate('/'); // Redirect to orderbook after successful creation
             // 🟢 Reset the form after success
             setPrice('');
             setQuantity('');
-            setUserId('');
             setSide('');
         } catch (error) {
             console.error("Error creating record:", error);
@@ -67,13 +66,7 @@ function CreateBA() {
 
                 <div className='flex justify-center'>
                     <div className='flex flex-col gap-5 w-max'>
-                        <input 
-                            type="text" 
-                            placeholder='UserID' 
-                            className='py-3 px-5 rounded-xl bg-black border-2' 
-                            value={userId} 
-                            onChange={(e) => setUserId(e.target.value)} 
-                        />
+                       
 
                         <input 
                             type="text" 

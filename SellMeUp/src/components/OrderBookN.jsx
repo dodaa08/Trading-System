@@ -8,6 +8,7 @@ function OrderBookN() {
     const [ask, setAsk] = useState([]);
     const [animateBids, setAnimateBids] = useState([]);
     const [animateAsks, setAnimateAsks] = useState([]);
+    const [checkUser, setCheckUser] = useState(false);
     
     useEffect(() => {
         const fetchBids = async () => {
@@ -26,6 +27,20 @@ function OrderBookN() {
                 console.log(Error);
             }
         }
+
+        const checkU = async () => {
+            try {
+                const check = localStorage.getItem('userId');
+                if (check) {
+                    setCheckUser(true);
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+
+
         fetchBids();
         fetchAsks();
     }, []);
@@ -59,7 +74,7 @@ function OrderBookN() {
         <div className='border-2 border-gray-700 rounded-xl p-4 text-white w-96 bg-black/125 '>
             
             <div className='mb-4'>
-                <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Bids</h1>
+                {/* <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Bids</h1> */}
                 <div className='flex justify-between gap-10 mt-4'>
                     <h1 className='font-mono text-xl'>Quantity</h1>
                     <h1 className='font-mono text-xl'>Price</h1>
@@ -68,15 +83,15 @@ function OrderBookN() {
                     {animateBids.map((bids, index) => (
                         <div key={index} className={`flex justify-between py-1 animate-flip`}>
                             <div className='bg-red-400/50' style={{ width: `${calculateWidth(bids.quantity)}%` }}>
-                                <h1>{bids.quantity}</h1>
+                                <h1>{bids.quantity}BTC</h1>
                             </div>
-                            <h1>{bids.price}</h1>
+                            <h1>${bids.price}</h1>
                         </div>
                     ))}
                 </div>
             </div>
             <div>
-                <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Asks</h1>
+                {/* <h1 className='text-2xl font-mono border-b border-gray-700 pb-2'>Asks</h1> */}
                 <div className='flex justify-between gap-10 mt-4'>
                     <h1 className='font-mono text-xl'>Quantity</h1>
                     <h1 className='font-mono text-xl'>Price</h1>
@@ -85,9 +100,9 @@ function OrderBookN() {
                     {animateAsks.map((asks, index) => (
                         <div key={index} className={`flex justify-between py-1 animate-flip`}>
                             <div className='bg-green-400/50' style={{ width: `${calculateWidth(asks.quantity)}%` }}>
-                                <h1>{asks.quantity}</h1>
+                                <h1>{asks.quantity}BTC</h1>
                             </div>
-                            <h1>{asks.price}</h1>
+                            <h1>${asks.price}</h1>
                         </div>
                     ))}
                 </div>
@@ -95,9 +110,21 @@ function OrderBookN() {
                 
             </div>
             <div className='flex justify-center w-full py-5 '>
-                    <Link to="/create">
+                {
+                    !checkUser && (
+                        <>
+                         <Link to="/create">
                      <button className='border-2 border-gray-600 py-2 px-5 rounded-xl font-mono hover:border-b transition duration-200'>Create Bids/Asks</button>
                     </Link>
+                        </>
+                    )
+                }
+                 {    checkUser && (
+                        <>
+                        
+                        </>
+                     )
+                    } 
                 
                 </div>
         </div>

@@ -17,6 +17,21 @@ app.use(cors({
 
 app.use(express.json());
 
+
+
+const Auth = async (req, res, next) => {
+    const { userId } = req.body;
+    if (!userId) return res.status(400).send("User ID is required");
+
+    const user = await User.findOne({ userId });
+    if (!user) return res.status(404).send("User not found");
+
+    next();
+};
+
+
+
+
 const flipBalance = async (fromUserId, toUserId, quantity, price) => {
     try {
         console.log("Looking for fromUserId:", fromUserId);
@@ -124,12 +139,10 @@ const fillOrders = async (side, price, quantity, userId) => {
 };
 
 
-
-
 const createUser = async (req, res) => {
     const { userId, name } = req.body;
-    const balance = 0; // initial balance
-    const BTC = 0;
+    const balance = 100000; // initial balance
+    const BTC = 1;
     try {
         const user = new User({ userId, name, balance, BTC});
         await user.save();
@@ -245,22 +258,44 @@ const { bids, asks } = orderBook; // Ensure OrderBook has bids/asks structure
 
 
 const getQuote = async (req, res) => {
-    const { side, price } = req.body;
-    try {
-        const orderBook = await OrderBook.findOne();
+    let AskPrice = 0;
+    let BidPrice = 0;
+    const orderBook = await OrderBook.findOne();
+const { asks, bids } = orderBook;
+     // Ensure OrderBook is correctly fetched from DB or provided
 
-        if (side == 'bid') {
-            const match = orderBook.asks.find(order => order.price <= price);
-            return res.status(200).send(match ? match : "No matching ask");
-        } else if (side == 'ask') {
-            const match = orderBook.bids.find(order => order.price >= price);
-            return res.status(200).send(match ? match : "No matching bid");
+    // Check if asks and bids are defined and are arrays
+    if (!Array.isArray(asks) || !Array.isArray(bids)) {
+        return res.status(400).send("Error: Invalid order book format (asks or bids missing).");
+    }
+
+    let result = 0;
+
+    try {
+        // Sort the bids in descending order and asks in ascending order
+        const sortedAsks = asks.sort((a, b) => a.price - b.price);  // Sort asks in ascending order
+        const sortedBids = bids.sort((a, b) => b.price - a.price);  // Sort bids in descending order
+
+        // Get the lowest ask price (first item in sorted asks array)
+        if (sortedAsks.length > 0) {
+            AskPrice = sortedAsks[0].price;
         }
 
-        res.status(400).send("Invalid side");
+        // Get the highest bid price (first item in sorted bids array)
+        if (sortedBids.length > 0) {
+            BidPrice = sortedBids[0].price;
+        }
+
+        // If both prices are available, calculate the percentage difference
+        if (AskPrice && BidPrice) {
+            result = ((AskPrice - BidPrice) / BidPrice) * 100;
+            res.status(200).send(result.toFixed(2) + "%");
+        } else {
+            res.status(400).send("Error: No valid ask or bid prices found.");
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Failed to fetch quote");
+        console.error("Error calculating quote:", error);
+        res.status(500).send("Internal server error.");
     }
 };
 
@@ -309,16 +344,27 @@ const getVolume = async (req, res) => {
 };
 
 
+const deleteOrderBook = async (req, res)=>{
+    try{
+        await OrderBook.deleteMany();
+        res.status(200).send("Order Book deleted successfully");
+    }
+    catch(Error){
+        console.error(Error);
+    }
+}
+
+
 // Route Endpoints
-app.get('/balance', getBalance);
-app.post('/order', placeOrder);
+app.post('/balance', Auth, getBalance);
+app.post('/order', Auth, placeOrder);
 app.get('/depth', getDepth);
-app.post('/quote', getQuote);
+app.get('/quote', getQuote);
 app.post('/createUser', createUser);
 app.get("/bids", getBids);
 app.get("/asks", getAsks);
 app.get("/volume", getVolume);
-
+app.delete("/deleteO", deleteOrderBook);
 
 const connect = async () => {
     try {
