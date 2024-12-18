@@ -31,6 +31,29 @@ const Auth = async (req, res, next) => {
 
 
 
+const updateOrderBook = async (side, price, quantity) => {
+    try {
+        const orderBook = await OrderBook.findOne();
+        if (!orderBook) throw new Error("Order book not found");
+
+        if (side === "ask") {
+            // Remove the fulfilled ask
+            await OrderBook.updateOne(
+                {},
+                { $pull: { asks: { price, quantity } } }
+            );
+        } else if (side === "bid") {
+            // Remove the fulfilled bid
+            await OrderBook.updateOne(
+                {},
+                { $pull: { bids: { price, quantity } } }
+            );
+        }
+    } catch (error) {
+        console.error("Error updating order book:", error.message);
+        throw error;
+    }
+};
 
 const flipBalance = async (fromUserId, toUserId, quantity, price) => {
     try {
@@ -44,6 +67,10 @@ const flipBalance = async (fromUserId, toUserId, quantity, price) => {
         // Check if users are found
         if (!fromUser || !toUser) {
             throw new Error("User(s) not found");
+        }
+
+        if (fromUser === toUser) {
+            throw new Error("User cannot trade with itself");
         }
 
         // Calculate transaction value
@@ -64,14 +91,32 @@ const flipBalance = async (fromUserId, toUserId, quantity, price) => {
         await fromUser.save();
         await toUser.save();
 
+        // Fetch the OrderBook
+        const orderbook = await OrderBook.findOne();
+        if (!orderbook) throw new Error("Order book not found");
+        const { asks, bids } = orderbook;
+
+        if (asks.length === 0 || bids.length === 0) {
+            return;
+        }
+
+        // Call updateOrderBook to remove the fulfilled ask/bid from the order book
+       
+            // Check if it's a bid or ask side to update accordingly
+            const side = "ask"; // Add logic to determine side (ask/bid)
+            await updateOrderBook(side, 0, 0);
+        
+
         console.log(
             `Transaction successful: ${quantity} at ${price}. Updated balances for Users ${fromUserId} and ${toUserId}.`
         );
+        console.log(`Removed fulfilled order from order book.`);
     } catch (error) {
         console.error("Error flipping balances:", error.message);
         throw error;
     }
 };
+
 
 
 const fillOrders = async (side, price, quantity, userId) => {
@@ -141,8 +186,8 @@ const fillOrders = async (side, price, quantity, userId) => {
 
 const createUser = async (req, res) => {
     const { userId, name } = req.body;
-    const balance = 100000; // initial balance
-    const BTC = 1;
+    const balance = 14589067.29; // initial balance
+    const BTC = 140;    
     try {
         const user = new User({ userId, name, balance, BTC});
         await user.save();
@@ -189,8 +234,11 @@ const placeOrder = async (req, res) => {
         const user = await User.findOne({ userId });
         if (!user) return res.status(404).json({ message: "User not found" });
 
+
+
+
         // 4️⃣ Check if user has enough balance for an ask (sell) order
-        if (side === 'ask' && user.balance < quantity) {
+        if (side === 'ask' && user.BTC < quantity) {
             return res.status(400).json({ message: "Insufficient BTC balance to place an ask order" });
         }
 
