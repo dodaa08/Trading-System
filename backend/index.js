@@ -264,6 +264,9 @@ const getQuote = async (req, res) => {
 const { asks, bids } = orderBook;
      // Ensure OrderBook is correctly fetched from DB or provided
 
+     if(asks.length == 0 || bids.length == 0){
+        return res.status(400).send("Error: Invalid order book format (asks or bids missing).");
+     }
     // Check if asks and bids are defined and are arrays
     if (!Array.isArray(asks) || !Array.isArray(bids)) {
         return res.status(400).send("Error: Invalid order book format (asks or bids missing).");

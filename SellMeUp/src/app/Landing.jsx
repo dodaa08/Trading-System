@@ -4,7 +4,6 @@ import HeaderC from '../components/HeaderC';
 import OrderBookN from '../components/OrderBookN';
 import OrderDepth from '../components/OrderDepth';
 
-
 function Landing() {
     const [Bids, setBids] = useState([]);
     const [Asks, setAsks] = useState([]);
@@ -31,15 +30,15 @@ function Landing() {
     return (
         <div className="bg-black h-screen    w-full text-white">
             <HeaderC />
-            <div className="flex flex-wrap justify-evenly ">
+            <div className="flex flex-wrap py-20 justify-evenly ">
                 {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (
                     <>
-                        <div className="py-10">
+                        <div className="">
                             <OrderBookN />
                         </div>
-                        <div className="py-20">
+                        <div className="">
                             <OrderDepth data={data} />
                         </div>
                        

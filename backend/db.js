@@ -12,12 +12,14 @@ const OrderBookModel = new Schema({
         {
             price: Number,
             quantity: Number,
+           
         },
     ],
     asks: [
         {
             price: Number,
             quantity: Number,
+            
         },
     ],
 });

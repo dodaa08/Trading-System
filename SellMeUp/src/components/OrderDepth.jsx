@@ -60,7 +60,15 @@ const OrderDepth = ({ data }) => {
             },
             title: {
                 display: true,
-                text: 'Order Depth Chart',
+                text: 'Order Depth Chart', // Your title text
+                font: {
+                    size: 20, // Adjust this value to make the title bigger
+                    weight: 'bold', // Optionally make the title bold
+                },
+                padding: {
+                    top: 20,
+                    bottom: 10, // Add padding if needed
+                },
             },
             tooltip: {
                 mode: 'index',
@@ -72,16 +80,23 @@ const OrderDepth = ({ data }) => {
                 title: {
                     display: true,
                     text: 'Price',
+                    font: {
+                        size: 14, // Adjust font size for X-axis label if needed
+                    },
                 },
             },
             y: {
                 title: {
                     display: true,
                     text: 'Cumulative Quantity',
+                    font: {
+                        size: 14, // Adjust font size for Y-axis label if needed
+                    },
                 },
             },
         },
     };
+    
 
     // Render the chart
     return (
