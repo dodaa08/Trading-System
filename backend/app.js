@@ -420,7 +420,7 @@ app.get("/", (req, res) => res.send("Welcome to SellMeUp!"));
 
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URL  || "mongodb+srv://dodakartik26:LzEnLaLX8mejXN2q@cluster0.t5zhc.mongodb.net/SellMeUp");
+        await mongoose.connect(process.env.MONGODB_URL);
         console.log('Connected to MongoDB');
     } catch (err) {
         console.error('Error connecting to MongoDB', err);
