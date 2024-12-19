@@ -6,7 +6,7 @@ import db from './db.js';
 const { OrderBook, User} = db;
 
 dotenv.config();
-const PORT = 3000;
+const PORT = 3000;  
 const app = express();
 
 app.use(cors({
@@ -419,7 +419,7 @@ app.delete("/deleteO", deleteOrderBook);
 
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URL);
+        await mongoose.connect(process.env.MONGODB_URL  || "mongodb+srv://dodakartik26:LzEnLaLX8mejXN2q@cluster0.t5zhc.mongodb.net/SellMeUp");
         console.log('Connected to MongoDB');
     } catch (err) {
         console.error('Error connecting to MongoDB', err);
@@ -428,6 +428,6 @@ const connect = async () => {
 connect();
 
 
-app.listen(PORT, () => {
+app.listen( process.env.PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

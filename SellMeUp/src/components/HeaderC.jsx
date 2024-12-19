@@ -121,7 +121,7 @@ function HeaderC() {
           <h1 className="text-lg font-semibold text-green-500">Quote</h1>
           <span className="text-xl font-semibold text-white">
             {quote ? 
-               `${quote}%`
+               `${quote}`
               : "Loading..."}
           </span>
         </div>
