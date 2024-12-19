@@ -33,7 +33,7 @@ function CreateUser() {
             setUserId('');
         } catch (error) {
             console.error("Error creating record:", error);
-            const message = error?.response?.data?.message || 'An error occurred while creating the user.';
+            const message = "userId already exists";
             setError(message);
         } finally {
             setLoading(false);

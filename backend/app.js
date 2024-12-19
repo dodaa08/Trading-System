@@ -186,8 +186,12 @@ const fillOrders = async (side, price, quantity, userId) => {
 
 const createUser = async (req, res) => {
     const { userId, name } = req.body;
-    const balance = 14589067.29; // initial balance
-    const BTC = 140;    
+    const balance = 100000; // initial balance
+    const BTC = 1;    
+
+    const existingUser = await User.findOne({ userId });
+    if (existingUser) return res.status(400).send("User already exists");
+
     try {
         const user = new User({ userId, name, balance, BTC});
         await user.save();
