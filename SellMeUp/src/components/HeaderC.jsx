@@ -18,7 +18,7 @@ function HeaderC() {
   useEffect(() => {
     const fetchQuote = async () => {
       try {
-        const res = await axios.get("http://10.12.80.135:3000/quote");
+        const res = await axios.get("https://trading-system-5.onrender.com/quote");
         console.log(res.data);
         setQuote(res.data);
       } catch (error) {
@@ -29,7 +29,7 @@ function HeaderC() {
 
     const fetchVolume = async () => {
       try {
-        const res = await axios.get("http://10.12.80.135:3000/volume");
+        const res = await axios.get("https://trading-system-5.onrender.com/volume");
         if (res.data && res.data.totalVolume !== undefined) {
           setVolume(res.data.totalVolume);
         } else {
@@ -57,7 +57,7 @@ function HeaderC() {
 
     const getBalance = async () => {
       try {
-        const res = await axios.post("http://10.12.80.135:3000/balance", {
+        const res = await axios.post("https://trading-system-5.onrender.com/balance", {
           userId: localStorage.getItem('userId'),
         });
         if (res.data && res.data.BTC !== undefined) {

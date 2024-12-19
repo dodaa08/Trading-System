@@ -12,9 +12,9 @@ function Landing() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const bidsResponse = await axios.get("http://10.12.80.135:3000/bids");
+                const bidsResponse = await axios.get("https://trading-system-5.onrender.com/bids");
                 setBids(bidsResponse.data.bids);
-                const asksResponse = await axios.get("http://10.12.80.135:3000/asks");
+                const asksResponse = await axios.get("https://trading-system-5.onrender.com/asks");
                 setAsks(asksResponse.data.asks);
             } catch (err) {
                 console.error(err);

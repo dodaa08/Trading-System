@@ -19,7 +19,7 @@ function CreateUser() {
         setLoading(true);
         
         try {
-            const response = await axios.post("http://localhost:3000/createUser", {
+            const response = await axios.post("https://trading-system-5.onrender.com/createUser", {
                 name: name,
                 userId: userId
             });

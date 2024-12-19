@@ -14,8 +14,8 @@ function OrderBookN() {
     const fetchData = async () => {
         try {
             const [bidsRes, asksRes] = await Promise.all([
-                axios.get("http://10.12.80.135:3000/bids"),
-                axios.get("http://10.12.80.135:3000/asks"),
+                axios.get("https://trading-system-5.onrender.com/bids"),
+                axios.get("https://trading-system-5.onrender.com/asks"),
             ]);
 
             // Validate response structure

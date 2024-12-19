@@ -24,7 +24,7 @@ function CreateBA() {
             setLoading(true); // Start loading
             setError(null); // Clear previous errors
 
-            const response = await axios.post("http://10.12.80.135:3000/order", {
+            const response = await axios.post("https://trading-system-5.onrender.com/order", {
                 userId: localStorage.getItem('userId'),
                 side: side,
                 price: Number(price),

@@ -416,6 +416,7 @@ app.get("/bids", getBids);
 app.get("/asks", getAsks);
 app.get("/volume", getVolume);
 app.delete("/deleteO", deleteOrderBook);
+app.get("/", (req, res) => res.send("Welcome to SellMeUp!"));
 
 const connect = async () => {
     try {

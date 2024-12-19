@@ -8,7 +8,7 @@ function Quote() {
     useEffect(() => {
         const fetchQuote = async () => {
             try {
-                const res = await axios.post("http://10.12.80.135:3000/quote", {
+                const res = await axios.post("https://trading-system-5.onrender.com/quote", {
                     userId: 1,         // Add userId
                     side: 'ask',       // Side as 'ask'
                     price: 200000,     // Price
