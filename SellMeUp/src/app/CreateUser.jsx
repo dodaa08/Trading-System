@@ -33,7 +33,7 @@ function CreateUser() {
             setUserId('');
         } catch (error) {
             console.error("Error creating record:", error);
-            const message = "userId already exists";
+            const message =  "User Might already exist in out DB, try entering some other number." || error.message;
             setError(message);
         } finally {
             setLoading(false);
@@ -47,11 +47,7 @@ function CreateUser() {
                 <div className='flex flex-col justify-center gap-5'>
                     <h2 className="text-center text-2xl font-bold">Create New User</h2>
 
-                    {error && (
-                        <div className="bg-red-500 text-white p-3 rounded-md">
-                            {error}
-                        </div>
-                    )}
+                    
 
                     <input 
                         type="text" 
@@ -79,6 +75,11 @@ function CreateUser() {
                             {loading ? 'Creating...' : 'Create'}
                         </button>
                     </div>
+                    {error && (
+                        <div className="bg-red-500 text-white p-3 rounded-md">
+                            {error}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
