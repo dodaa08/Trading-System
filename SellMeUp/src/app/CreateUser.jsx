@@ -19,7 +19,7 @@ function CreateUser() {
         setLoading(true);
         
         try {
-            const response = await axios.post("https://trading-system-5.onrender.com/createUser", {
+            const response = await axios.post("http://10.12.80.135:3000/createUser", {
                 name: name,
                 userId: userId
             });
@@ -63,7 +63,7 @@ function CreateUser() {
 
                     <input 
                         type="text" 
-                        placeholder="Enter User ID" 
+                        placeholder="Enter a unique Number" 
                         value={userId} 
                         onChange={(e) => setUserId(e.target.value)} 
                         className='py-3 px-5 rounded-xl bg-black border-2'

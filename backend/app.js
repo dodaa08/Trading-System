@@ -186,6 +186,7 @@ const fillOrders = async (side, price, quantity, userId) => {
 
 const createUser = async (req, res) => {
     const { userId, name } = req.body;
+    
     const balance = 100000; // initial balance
     const BTC = 1;    
 

@@ -90,7 +90,7 @@ function CreateBA() {
                                 onClick={createRecords}
                                 disabled={loading}
                             >
-                                {loading ? 'Loading...' : (side ? side : 'Select a value')}
+                                {loading ? 'Loading...' : (side ? side : 'Select Bid or Ask')}
                             </button>
                         </div>
 

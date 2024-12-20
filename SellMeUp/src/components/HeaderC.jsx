@@ -85,7 +85,7 @@ function HeaderC() {
       <a href="/" className="text-white hover:text-blue-400 transition">
         <div className="flex items-center gap-4">
           <Luggage className="h-10 w-10 text-white" />
-          <div className="text-white text-2xl font-bold tracking-tight">SellMeUp</div>
+          <div className="text-white text-2xl font-bold tracking-tight">Trading Engine</div>
         </div>
       </a>
 

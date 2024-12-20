@@ -28,9 +28,11 @@ function Landing() {
     const data = { bids: Bids, asks: Asks };
 
     return (
-        <div className="bg-black h-screen    w-full text-white">
+        <div className="bg-black h-full w-full text-white ">
+            <div>
             <HeaderC />
-            <div className="flex flex-wrap py-20 justify-evenly ">
+            </div>
+            <div className="bg-black h-screen py-10 flex flex-wrap justify-evenly ">
                 {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (

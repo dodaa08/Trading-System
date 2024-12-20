@@ -59,7 +59,7 @@ function OrderBookN() {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 5000);
+        const interval = setInterval(fetchData, 3000);
         checkU();
         return () => clearInterval(interval);
     }, []);
@@ -72,7 +72,7 @@ function OrderBookN() {
     const formatNumber = (number) => new Intl.NumberFormat().format(number);
 
     return (
-        <div className="border-2 border-gray-700 rounded-lg text-white p-4 bg-black/90 w-max max-w-2xl mx-auto">
+        <div className="border-2  border-gray-700 rounded-lg text-white p-4 bg-black/90 w-max max-w-2xl mx-auto">
             <div className="flex justify-between gap-10 border-b border-gray-600 pb-2 text-gray-300 font-mono text-lg">
                 <h1 className="w-1/4 text-left">Quantity (BTC)</h1>
                 <h1 className="w-1/4 text-left">Price (USD)</h1>
