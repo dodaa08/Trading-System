@@ -28,26 +28,28 @@ function Landing() {
     const data = { bids: Bids, asks: Asks };
 
     return (
-        <div className="bg-black min-h-screen w-full text-white">
-        <div>
+        <div className="bg-black h-full w-full text-white ">
+            <div>
             <HeaderC />
+            </div>
+            <div className="bg-black h-screen  flex flex-wrap justify-evenly ">
+                {error ? (
+                    <div className="text-red-500">{error}</div>
+                ) : (
+                    <>
+                        <div className="py-5">
+                            <OrderBookN />
+                        </div>
+                        <div className="py-10">
+                            <OrderDepth data={data} />
+                        </div>
+                       
+                        
+                    </>
+                )}
+                
+            </div>
         </div>
-
-        <div className="bg-black py-10 flex flex-wrap justify-evenly">
-            {error ? (
-                <div className="text-red-500 text-center w-full">{error}</div>
-            ) : (
-                <>
-                    <div className="w-full md:w-1/2 p-4">
-                        <OrderBookN />
-                    </div>
-                    <div className="w-full md:w-1/2 p-4">
-                        <OrderDepth data={data} />
-                    </div>
-                </>
-            )}
-        </div>
-    </div>
     );
 }
 
