@@ -20,7 +20,7 @@ function HeaderC() {
       try {
         const res = await axios.get("https://trading-system-5.onrender.com/quote");
         console.log(res.data);
-        setQuote(res.data);
+        setQuote(res.data || 0);
       } catch (error) {
         console.error(error);
         setError("Failed to fetch quote");
@@ -31,7 +31,7 @@ function HeaderC() {
       try {
         const res = await axios.get("https://trading-system-5.onrender.com/volume");
         if (res.data && res.data.totalVolume !== undefined) {
-          setVolume(res.data.totalVolume);
+          setVolume(res.data.totalVolume || 0);
         } else {
           throw new Error("Invalid volume data");
         }
@@ -87,11 +87,11 @@ function HeaderC() {
   }, []);
 
   return (
-    <div className="bg-black/95 flex items-center justify-between px-10 py-4 border-b border-gray-800">
+    <div className="bg-black/95 width=device-width md-bg-black sm:flex flex items-center justify-between sm:justify-between px-10 py-4 border-b border-gray-800">
       {/* Left side - Logo */}
       <a href="/" className="text-white hover:text-blue-400 transition">
         <div className="flex items-center gap-4">
-          <Luggage className="h-10 w-10 text-white" />
+          <Luggage className="h-10  text-white"/>
           <div className="text-white text-2xl font-bold tracking-tight">Trading Engine</div>
         </div>
       </a>
@@ -114,7 +114,7 @@ function HeaderC() {
         </div>
 
       {/* Right side - Volume, Quote, and Balance */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-8 ">
         {/* Volume */}
         <div className="flex items-center space-x-2">
           <h1 className="text-lg font-semibold text-blue-500">24h Volume</h1>

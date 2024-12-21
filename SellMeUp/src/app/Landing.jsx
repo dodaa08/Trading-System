@@ -28,16 +28,16 @@ function Landing() {
     const data = { bids: Bids, asks: Asks };
 
     return (
-        <div className="bg-black h-full w-full text-white ">
-            <div>
+        <div className="text-white h-full sm:h-full">
+            <div className=''>
             <HeaderC />
             </div>
-            <div className="bg-black h-screen  flex flex-wrap justify-evenly ">
+            <div className="bg-black h-screen sm:h-screen flex justify-evenly py-10">
                 {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (
                     <>
-                        <div className="py-5">
+                        <div className="">
                             <OrderBookN />
                         </div>
                         <div className="py-10">
