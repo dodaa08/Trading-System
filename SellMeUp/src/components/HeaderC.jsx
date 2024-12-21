@@ -57,14 +57,21 @@ function HeaderC() {
 
     const getBalance = async () => {
       try {
-        const res = await axios.post("https://trading-system-5.onrender.com/balance", {
-          userId: localStorage.getItem('userId'),
-        });
-        if (res.data && res.data.BTC !== undefined) {
-          setBalance(res.data.balance);
-          setBTC(res.data.BTC);
-        } else {
-          throw new Error("Invalid balance data");
+        const check = localStorage.getItem("userId");
+        if(check){
+          const res = await axios.post("https://trading-system-5.onrender.com/balance", {
+            userId: localStorage.getItem('userId'),
+          });
+          if (res.data && res.data.BTC !== undefined) {
+            setBalance(res.data.balance);
+            setBTC(res.data.BTC);
+          } else {
+            throw new Error("Invalid balance data");
+          }
+        }
+        else{
+          setBTC(0);
+          setBalance(0);
         }
       } catch (error) {
         console.error(error);
