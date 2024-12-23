@@ -1,6 +1,6 @@
-# SellMeUp
+# TradingEngine
 
-This is a simple trading system web application built with React and Axios. It allows users to fetch their balance, view the order book, place buy/sell orders, and get quotes for specific quantities.
+This is a Trading Engine built with MERN. It allows users to fetch their balance, view the order book, place buy/sell Stocks, and get quotes for specific quantities.
 
 ---
 
@@ -10,14 +10,6 @@ This is a simple trading system web application built with React and Axios. It a
 - **Place Orders**: Submit buy (bid) or sell (ask) orders with price and quantity.
 - **Get Quote**: Fetch the best bid/ask price and calculate the total for a given quantity.
 - **Order Book**: View the live order book with bids and asks.
-
----
-
-## Tech Stack
-
-- **Frontend**: React.js
-- **Styling**: Tailwind CSS (dark mode included)
-- **HTTP Client**: Axios
 
 ---
 
