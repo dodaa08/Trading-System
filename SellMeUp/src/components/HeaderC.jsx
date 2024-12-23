@@ -87,60 +87,49 @@ function HeaderC() {
   }, []);
 
   return (
-    <div className="bg-black/95 width=device-width md-bg-black sm:flex flex items-center justify-between sm:justify-between px-10 py-4 border-b border-gray-800">
-      {/* Left side - Logo */}
-      <a href="/" className="text-white hover:text-blue-400 transition">
-        <div className="flex items-center gap-4">
-          <Luggage className="h-10  text-white"/>
-          <div className="text-white text-2xl font-bold tracking-tight">Trading Engine</div>
-        </div>
-      </a>
+    <div className="bg-black/95 w-full flex flex-wrap items-center justify-between px-4 sm:px-10 py-4 border-b border-gray-800">
 
-      <div className="flex items-center space-x-2">
-        {
-          !checkUser ? (
-            <>
-             <Link to="/create-user">
-          <button className="text-xl border-2 py-2 px-5 rounded-xl border-gray-700 hover:border-gray-600 transition duration-200">Create User</button>
-          </Link>
-            </>
-          ) : (
-            <>
-            {/* <h1>user created</h1> */}
-            </>
-          )
-        }
-         
-        </div>
+      
+<a href="/" className="flex items-center gap-4 text-white hover:text-blue-400 transition">
+  <Luggage className="h-8 sm:h-10 text-white" />
+  <div className="text-white text-xl sm:text-2xl font-bold tracking-tight">
+    Trading Engine
+  </div>
+</a>
 
-      {/* Right side - Volume, Quote, and Balance */}
-      <div className="flex items-center gap-8 ">
-        {/* Volume */}
-        <div className="flex items-center space-x-2">
-          <h1 className="text-lg font-semibold text-blue-500">24h Volume</h1>
-          <span className="text-xl font-semibold text-white">
-            {volume ? `$${volume}` : "Loading..."}
-          </span>
-        </div>
 
-        {/* Quote */}
-        <div className="flex items-center space-x-2">
-          <h1 className="text-lg font-semibold text-green-500">Quote</h1>
-          <span className="text-xl font-semibold text-white">
-            {quote ? 
-               `${quote}`
-              : "Loading..."}
-          </span>
-        </div>
+<div className="flex items-center space-x-2">
+  {!checkUser ? (
+    <Link to="/create-user">
+      <button className="text-sm sm:text-base border-2 py-1 sm:py-2 px-3 sm:px-5 rounded-xl border-gray-700 hover:border-gray-600 transition duration-200">
+        Create User
+      </button>
+    </Link>
+  ) : null}
+</div>
 
-        {/* Balance */}
-        <div className="flex items-center space-x-2">
-          <h1 className="text-lg font-semibold text-yellow-500">Balance</h1>
-          <span className="text-xl font-semibold text-white">
-            {balance !== null ? `$ ${balance}, ${BTC} BTC` : error || "Loading..."}
-          </span>
-        </div>
-      </div>
+
+<div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-4 sm:mt-0">
+  <div className="text-center sm:text-left">
+    <h1 className="text-sm sm:text-base font-semibold text-blue-500">24h Volume</h1>
+    <span className="text-base sm:text-lg font-semibold text-white">
+      {volume ? `$${volume}` : "Loading..."}
+    </span>
+  </div>
+  <div className="text-center sm:text-left">
+    <h1 className="text-sm sm:text-base font-semibold text-green-500">Quote</h1>
+    <span className="text-base sm:text-lg font-semibold text-white">
+      {quote ? `${quote}` : "Loading..."}
+    </span>
+  </div>
+  <div className="text-center sm:text-left">
+    <h1 className="text-sm sm:text-base font-semibold text-yellow-500">Balance</h1>
+    <span className="text-base sm:text-lg font-semibold text-white">
+      {balance !== null ? `$ ${balance}, ${BTC} BTC` : error || "Loading..."}
+    </span>
+  </div>
+</div>
+
     </div>
   );
 }

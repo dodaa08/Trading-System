@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import HeaderC from '../components/HeaderC'
+import React, { useState } from 'react';
+import HeaderC from '../components/HeaderC';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,14 +9,16 @@ function CreateUser() {
     const [loading, setLoading] = useState(false); // Loading state to disable button
     const [error, setError] = useState(''); // Error message for the user
     const navigate = useNavigate();
-    // 📘 Reusable Input Component
-   
 
     // 📘 Function to create user in the database
     const createRecords = async () => {
         // Clear previous error
         setError('');
         setLoading(true);
+        if(name == "" || userId == ""){
+            setError("Fill in the Entries..");
+            return;
+        }
         
         try {
             const response = await axios.post("https://trading-system-w0pl.onrender.com/createUser", {
@@ -33,7 +35,7 @@ function CreateUser() {
             setUserId('');
         } catch (error) {
             console.error("Error creating record:", error);
-            const message =  "User Might already exist in out DB, try entering some other number." || error.message;
+            const message = "User Might already exist in our DB, try entering some other number." || error.message;
             setError(message);
         } finally {
             setLoading(false);
@@ -41,20 +43,18 @@ function CreateUser() {
     }
 
     return (
-        <div className='bg-black h-screen text-white transition duration-200'>
+        <div className='bg-black min-h-screen text-white flex flex-col overflow-hidden'>
             <HeaderC />
-            <div className='flex justify-center py-40'>
-                <div className='flex flex-col justify-center gap-5'>
+            <div className='flex justify-center flex-grow mb-40'>
+                <div className='flex flex-col justify-center gap-5 w-full max-w-md px-12'>
                     <h2 className="text-center text-2xl font-bold">Create New User</h2>
-
-                    
 
                     <input 
                         type="text" 
                         placeholder="Enter your name" 
                         value={name} 
                         onChange={(e) => setName(e.target.value)} 
-                        className='py-3 px-5 rounded-xl bg-black border-2'
+                        className='py-3 px-5 rounded-xl bg-black border-2 border-gray-800'
                     />
 
                     <input 
@@ -62,7 +62,7 @@ function CreateUser() {
                         placeholder="Enter a unique Number" 
                         value={userId} 
                         onChange={(e) => setUserId(e.target.value)} 
-                        className='py-3 px-5 rounded-xl bg-black border-2'
+                        className='py-3 px-5 rounded-xl bg-black border-2 border-gray-800'
                     />
 
                     <div className='flex justify-center'>

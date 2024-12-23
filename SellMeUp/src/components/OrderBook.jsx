@@ -143,18 +143,7 @@ function OrderBook() {
         </div>
       </div>
 
-      {/* Large Trades */}
-      <div className="w-1/4 ml-8 bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-xl font-bold mb-4">Large Trades</h3>
-        <ul>
-          {largeTrades.map((trade, index) => (
-            <li key={index} className="flex justify-between py-2 border-b border-gray-700">
-              <span>{trade.price}</span>
-              <span>{trade.volume}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      
     </div>
   );
 }
