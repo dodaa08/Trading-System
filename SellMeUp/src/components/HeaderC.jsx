@@ -95,16 +95,24 @@ function HeaderC() {
   <div className="text-white text-xl sm:text-2xl font-bold tracking-tight">
     Trading Engine
   </div>
+ 
 </a>
 
 
 <div className="flex items-center space-x-2">
   {!checkUser ? (
+    <div className="flex gap-10">
     <Link to="/create-user">
       <button className="text-sm sm:text-base border-2 py-1 sm:py-2 px-3 sm:px-5 rounded-xl border-gray-700 hover:border-gray-600 transition duration-200">
         Create User
       </button>
     </Link>
+    <Link to="https://youtu.be/UW00Ub6g9ds?si=pD7VKO3uEZmixQcW" target="_blank" rel="noopener noreferrer">
+    <div className="text-white text-l border-2 py-1 hover:bg-gray-800 transition duration-200 px-5 rounded-xl border-gray-600 sm:text-2xl font-bold tracking-tight">
+    How it works
+  </div>
+    </Link>
+    </div>
   ) : null}
 </div>
 
