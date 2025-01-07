@@ -3,19 +3,23 @@ import axios from 'axios';
 import HeaderC from '../components/HeaderC';
 import OrderBookN from '../components/OrderBookN';
 import OrderDepth from '../components/OrderDepth';
+import Loader from '../components/Loader';
 
 function Landing() {
     const [Bids, setBids] = useState([]);
     const [Asks, setAsks] = useState([]);
     const [error, setError] = useState(null);
+    const [isloading, setisloading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setisloading(true)
                 const bidsResponse = await axios.get("https://trading-system-5.onrender.com/bids");
                 setBids(bidsResponse.data.bids);
                 const asksResponse = await axios.get("https://trading-system-5.onrender.com/asks");
                 setAsks(asksResponse.data.asks);
+                setisloading(false);
             } catch (err) {
                 console.error(err);
                 setError("Failed to fetch order book data.");
@@ -28,23 +32,32 @@ function Landing() {
     const data = { bids: Bids, asks: Asks };
 
     return (
-        <div className="text-white min-h-screen flex flex-col overflow-hidden">
+        <>
+        {
+            !isloading && 
+            <div className="text-white min-h-screen flex flex-col overflow-hidden">
             <HeaderC />
             <div className="bg-black flex-grow flex flex-col sm:flex-row justify-evenly py-5 overflow-hidden">
                 {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (
                     <>
-                        <div className="flex-grow sm:flex-grow-0 py-10">
-                            <OrderBookN />
-                        </div>
-                        <div className="py-10 flex-grow sm:flex-grow-0">
-                            <OrderDepth data={data} />
-                        </div>
+                    <div className="flex-grow sm:flex-grow-0 py-10">
+                    <OrderBookN />
+                    </div>
+                    <div className="py-20 flex-grow sm:flex-grow-0">
+                    <OrderDepth data={data} />
+                    </div>
                     </>
                 )}
-            </div>
-        </div>
+                </div>
+                </div>
+            }
+            {
+                isloading && 
+                <Loader />
+            }
+            </>
     );
 }
 

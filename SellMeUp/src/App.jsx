@@ -12,6 +12,7 @@ function App() {
         <Route path='/' element={<Landing />}/> 
         <Route path='/create' element={<CreateBA />}/>
         <Route path="/create-user" element={<CreateUser />} />
+        <Route path="*" element={<CreateUser />} />
       </Routes>
     </Router>
     </div>
